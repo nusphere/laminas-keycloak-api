@@ -3,6 +3,8 @@
 namespace Laminas\KeyCloak\Api\Services;
 
 use Keycloak\Admin\KeycloakClient;
+use Laminas\KeyCloak\Api\Exception\ErrorException;
+use Laminas\KeyCloak\Api\Exception\WarningException;
 
 abstract class AdminClient
 {
@@ -21,5 +23,25 @@ abstract class AdminClient
     final public function setKeycloakClient(KeycloakClient $keycloakClient): void
     {
         $this->keycloakClient = $keycloakClient;
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    final public function checkResponseError(array $result): void
+    {
+        if (array_key_exists('error', $result)) {
+            throw new ErrorException($result['error']);
+        }
+    }
+
+    /**
+     * @throws WarningException
+     */
+    final public function checkResponseWarnings(array $result): void
+    {
+        if (array_key_exists('errorMessage', $result)) {
+            throw new WarningException($result['errorMessage']);
+        }
     }
 }

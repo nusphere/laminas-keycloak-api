@@ -3,7 +3,7 @@
 namespace Laminas\KeyCloak\Api\Command\Realm;
 
 use Laminas\KeyCloak\Api\Exception\ErrorException;
-use Laminas\KeyCloak\Api\Exception\NoSuccessException;
+use Laminas\KeyCloak\Api\Exception\WarningException;
 use Laminas\KeyCloak\Api\Exception\RealmException;
 use Laminas\KeyCloak\Api\Services\RealmServices;
 use Symfony\Component\Console\Command\Command;
@@ -42,7 +42,7 @@ final class DeleteCommand extends Command
             $output->writeln('<info>Realm "' . $name . '" was successfully deleted.</info>');
             return Command::SUCCESS;
 
-        } catch (NoSuccessException | RealmException $e) {
+        } catch (WarningException | RealmException $e) {
             $output->writeln('<comment>Warning: ' . $e->getMessage() . '</comment>');
 
             return $input->hasOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;

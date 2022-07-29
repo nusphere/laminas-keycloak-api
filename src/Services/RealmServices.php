@@ -3,14 +3,14 @@
 namespace Laminas\KeyCloak\Api\Services;
 
 use Laminas\KeyCloak\Api\Exception\ErrorException;
-use Laminas\KeyCloak\Api\Exception\NoSuccessException;
+use Laminas\KeyCloak\Api\Exception\WarningException;
 use Laminas\KeyCloak\Api\Exception\RealmException;
 
 class RealmServices extends AdminClient
 {
     /**
      * @throws ErrorException
-     * @throws NoSuccessException
+     * @throws WarningException
      * @throws RealmException
      */
     final public function createRealm(string $realmName): bool
@@ -25,20 +25,15 @@ class RealmServices extends AdminClient
             ]
         );
 
-        if (array_key_exists('error', $result)) {
-            throw new ErrorException($result['error']);
-        }
-
-        if (array_key_exists('errorMessage', $result)) {
-            throw new NoSuccessException($result['errorMessage']);
-        }
+        $this->checkResponseError($result);
+        $this->checkResponseWarnings($result);
 
         return true;
     }
 
     /**
      * @throws ErrorException
-     * @throws NoSuccessException
+     * @throws WarningException
      * @throws RealmException
      */
     final public function deleteRealm(string $realmName): bool
@@ -53,13 +48,8 @@ class RealmServices extends AdminClient
             ]
         );
 
-        if (array_key_exists('error', $result)) {
-            throw new ErrorException($result['error']);
-        }
-
-        if (array_key_exists('errorMessage', $result)) {
-            throw new NoSuccessException($result['errorMessage']);
-        }
+        $this->checkResponseError($result);
+        $this->checkResponseWarnings($result);
 
         return true;
     }
@@ -67,7 +57,7 @@ class RealmServices extends AdminClient
 
     /**
      * @throws ErrorException
-     * @throws NoSuccessException
+     * @throws WarningException
      * @throws RealmException
      */
     final public function importRealm(string $jsonFile): bool
@@ -84,13 +74,8 @@ class RealmServices extends AdminClient
 
         $result = $this->getKeycloakClient()->importRealm($realmArray);
 
-        if (array_key_exists('error', $result)) {
-            throw new ErrorException($result['error']);
-        }
-
-        if (array_key_exists('errorMessage', $result)) {
-            throw new NoSuccessException($result['errorMessage']);
-        }
+        $this->checkResponseError($result);
+        $this->checkResponseWarnings($result);
 
         return true;
     }
