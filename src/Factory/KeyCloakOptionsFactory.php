@@ -1,8 +1,7 @@
 <?php
 
-namespace Laminas\KeyCloak\Api\Factory\Options;
+namespace Laminas\KeyCloak\Api\Factory;
 
-use Laminas\KeyCloak\Api\Factory\KeyCloakApiFactory;
 use Laminas\KeyCloak\Api\Options\KeyCloakOptions;
 use Psr\Container\ContainerInterface;
 

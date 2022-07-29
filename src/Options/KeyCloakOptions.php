@@ -9,14 +9,10 @@ class KeyCloakOptions extends AbstractOptions
     private string $hostname = 'localhost';
     private string $scheme = 'http';
     private string $realm = 'master';
+    private string $clientId = 'admin-cli';
     private string $user = 'admin';
     private string $pass = 'admin';
     private int $port = 8080;
-
-    public function getRealmUri(): string
-    {
-        return $this->getFullHostname() . '/realms/' . $this->getRealm();
-    }
 
     public function getFullHostname(): string
     {
@@ -81,5 +77,21 @@ class KeyCloakOptions extends AbstractOptions
     public function setPort(int $port): void
     {
         $this->port = $port;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientId(): string
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @param string $clientId
+     */
+    public function setClientId(string $clientId): void
+    {
+        $this->clientId = $clientId;
     }
 }
