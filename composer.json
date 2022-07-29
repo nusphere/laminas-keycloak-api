@@ -1,0 +1,60 @@
+{
+  "name": "laminas/laminas-keycloak-api",
+  "description": "Provides an easy interface for performing Hyper-Text Transfer Protocol (HTTP) requests",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "laminas",
+    "keycloak",
+    "api"
+  ],
+  "homepage": "https://laminas.dev",
+  "support": {
+    "docs": "https://docs.laminas.dev/laminas-http/",
+    "issues": "https://github.com/laminas/laminas-http/issues",
+    "source": "https://github.com/laminas/laminas-http",
+    "rss": "https://github.com/laminas/laminas-http/releases.atom",
+    "chat": "https://laminas.dev/chat",
+    "forum": "https://discourse.laminas.dev"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "*": false
+    }
+  },
+  "require": {
+    "php": "^7.4 || ~8.0.0 || ~8.1.0",
+    "laminas/laminas-cli": "^1.4.0",
+    "laminas/laminas-mvc": "^3.3",
+    "laminas/laminas-http": "^2.15"
+  },
+  "require-dev": {
+    "ext-curl": "*",
+    "laminas/laminas-coding-standard": "~2.3.0",
+    "phpunit/phpunit": "^9.5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Laminas\\KeyCloak\\Api\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "LaminasTest\\KeyCloak\\Api\\": "test/"
+    }
+  },
+  "scripts": {
+    "check": [
+      "@cs-check",
+      "@test"
+    ],
+    "cs-check": "phpcs",
+    "cs-fix": "phpcbf",
+    "test": "phpunit --colors=always",
+    "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+    "laminas": "laminas"
+  },
+  "conflict": {
+    "zendframework/zend-http": "*"
+  }
+}
