@@ -1,5 +1,5 @@
 {
-  "name": "nusphere/laminas-keycloak-api",
+  "name": "nubox/laminas-keycloak-api",
   "description": "Provides an easy interface for performing Hyper-Text Transfer Protocol (HTTP) requests",
   "license": "BSD-3-Clause",
   "keywords": [
