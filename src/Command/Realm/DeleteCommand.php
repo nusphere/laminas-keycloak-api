@@ -5,6 +5,7 @@ namespace Laminas\KeyCloak\Api\Command\Realm;
 use Laminas\KeyCloak\Api\Exception\ErrorException;
 use Laminas\KeyCloak\Api\Exception\WarningException;
 use Laminas\KeyCloak\Api\Exception\RealmException;
+use Laminas\KeyCloak\Api\Model\Realm;
 use Laminas\KeyCloak\Api\Services\RealmServices;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,11 +36,12 @@ final class DeleteCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $name = $input->getArgument('realm-name');
+            $realm = new Realm();
+            $realm->setRealm($input->getArgument('realm-name'));
 
-            $this->realmService->deleteRealm($name);
+            $this->realmService->deleteRealm($realm);
 
-            $output->writeln('<info>Realm "' . $name . '" was successfully deleted.</info>');
+            $output->writeln('<info>Realm "' . $realm->getRealm() . '" was successfully deleted.</info>');
             return Command::SUCCESS;
 
         } catch (WarningException | RealmException $e) {

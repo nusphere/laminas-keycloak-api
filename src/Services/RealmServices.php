@@ -1,7 +1,6 @@
 <?php
 
 /** @noinspection NullPointerExceptionInspection - until PHP 8.0 */
-/** @noinspection MissingParameterTypeDeclarationInspection - until PHP 8.0 */
 
 namespace Laminas\KeyCloak\Api\Services;
 
@@ -12,19 +11,13 @@ use Laminas\KeyCloak\Api\Model\Realm;
 
 class RealmServices extends AdminClient
 {
-    /**
-     * @param string|Realm $realm
-     *
+    /**     *
      * @throws ErrorException
      * @throws WarningException
      * @throws RealmException
      */
-    final public function createRealm($realm): bool
+    final public function createRealm(Realm $realm): bool
     {
-        if (is_string($realm)) {
-            $realm = $this->convertRealmNameToRealm($realm);
-        }
-
         if ($this->existsRealm($realm)) {
             throw new RealmException('Realm ' . $realm->getRealm() . ' still exists');
         }
@@ -38,18 +31,12 @@ class RealmServices extends AdminClient
     }
 
     /**
-     * @param string|Realm $realm
-     *
      * @throws ErrorException
      * @throws WarningException
      * @throws RealmException
      */
-    final public function deleteRealm($realm): bool
+    final public function deleteRealm(Realm $realm): bool
     {
-        if (is_string($realm)) {
-            $realm = $this->convertRealmNameToRealm($realm);
-        }
-
         if (!$this->existsRealm($realm)) {
             throw new RealmException('Realm ' . $realm->getRealm() . ' does not exists');
         }
@@ -62,7 +49,6 @@ class RealmServices extends AdminClient
         return true;
     }
 
-
     /**
      * @throws ErrorException
      * @throws WarningException
@@ -70,18 +56,7 @@ class RealmServices extends AdminClient
      */
     final public function importRealm(string $jsonFile): bool
     {
-        $realm = $this->getRealmByJson($jsonFile);
-
-        if ($this->existsRealm($realm->getRealm())) {
-            throw new RealmException('Realm ' . $realm->getRealm() . ' still exists');
-        }
-
-        $result = $this->getKeycloakClient()->importRealm($this->getHydrator()->extract($realm));
-
-        $this->checkResponseError($result);
-        $this->checkResponseWarnings($result);
-
-        return true;
+        return $this->createRealm($this->getRealmByJson($jsonFile));
     }
 
     /**
@@ -99,17 +74,11 @@ class RealmServices extends AdminClient
     }
 
     /**
-     * @param string|Realm $realm
-     *
      * @throws ErrorException
      * @throws WarningException
      */
-    final public function getRealm($realm): Realm
+    final public function getRealm(Realm $realm): Realm
     {
-        if (is_string($realm)) {
-            $realm = $this->convertRealmNameToRealm($realm);
-        }
-
         $result = $this->getKeycloakClient()->getRealm(['realm' => $realm->getRealm()]);
 
         $this->checkResponseError($result);
@@ -118,15 +87,8 @@ class RealmServices extends AdminClient
         return $this->getHydrator()->hydrate($result, new Realm());
     }
 
-    /**
-     * @param string|Realm $realm
-     */
-    final public function existsRealm($realm): bool
+    final public function existsRealm(Realm $realm): bool
     {
-        if (is_string($realm)) {
-            $realm = $this->convertRealmNameToRealm($realm);
-        }
-
         try {
             $this->getRealm($realm);
         } catch (ErrorException | WarningException $e) {
@@ -134,10 +96,5 @@ class RealmServices extends AdminClient
         }
 
         return true;
-    }
-
-    private function convertRealmNameToRealm(string $realmName): Realm
-    {
-        return $this->getHydrator()->hydrate(['realm' => $realmName], new Realm());
     }
 }
