@@ -7,15 +7,6 @@
     "keycloak",
     "api"
   ],
-  "homepage": "https://laminas.dev",
-  "support": {
-    "docs": "https://docs.laminas.dev/laminas-http/",
-    "issues": "https://github.com/laminas/laminas-http/issues",
-    "source": "https://github.com/laminas/laminas-http",
-    "rss": "https://github.com/laminas/laminas-http/releases.atom",
-    "chat": "https://laminas.dev/chat",
-    "forum": "https://discourse.laminas.dev"
-  },
   "config": {
     "sort-packages": true,
     "allow-plugins": {
@@ -54,8 +45,5 @@
     "test": "phpunit --colors=always",
     "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
     "laminas": "laminas"
-  },
-  "conflict": {
-    "zendframework/zend-http": "*"
   }
 }
