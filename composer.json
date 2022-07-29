@@ -1,6 +1,6 @@
 {
   "name": "nubox/laminas-keycloak-api",
-  "description": "Provides an easy interface for performing Hyper-Text Transfer Protocol (HTTP) requests",
+  "description": "Provides an easy interface for administrate a keycloak instance via REST Api",
   "license": "BSD-3-Clause",
   "keywords": [
     "laminas",
@@ -30,7 +30,7 @@
     "mohammad-waleed/keycloak-admin-client": "^0.31"
   },
   "require-dev": {
-    "ext-curl": "*",
+    "roave/security-advisories": "dev-latest",
     "laminas/laminas-coding-standard": "~2.3.0",
     "phpunit/phpunit": "^9.5.5"
   },
