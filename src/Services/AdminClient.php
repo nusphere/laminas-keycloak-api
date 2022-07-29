@@ -3,11 +3,14 @@
 namespace Laminas\KeyCloak\Api\Services;
 
 use Keycloak\Admin\KeycloakClient;
+use Laminas\Hydrator\HydratorAwareTrait;
 use Laminas\KeyCloak\Api\Exception\ErrorException;
 use Laminas\KeyCloak\Api\Exception\WarningException;
 
 abstract class AdminClient
 {
+    use HydratorAwareTrait;
+
     private KeycloakClient $keycloakClient;
 
     public function __construct(KeycloakClient $keycloakClient)

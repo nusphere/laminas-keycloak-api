@@ -13,4 +13,10 @@ This module tries to wrap this client to a laminas module and brings some additi
   - `keycloak:realms:delete` -> delete a realm with given realm name
   - `keycloak:realms:import` -> import a realm by a given exported realm json file
 - adds some Service classes for usage in your code
+- provide a model support
 - etc.
+
+Planed stuff:
+- PHP 8.0 support with union types for services classes
+- full model support
+- more commands and more services
