@@ -43,7 +43,6 @@ final class DeleteCommand extends Command
 
             $output->writeln('<info>Realm "' . $realm->getRealm() . '" was successfully deleted.</info>');
             return Command::SUCCESS;
-
         } catch (WarningException | RealmException $e) {
             $output->writeln('<comment>Warning: ' . $e->getMessage() . '</comment>');
 

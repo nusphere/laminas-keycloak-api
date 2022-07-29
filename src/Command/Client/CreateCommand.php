@@ -44,13 +44,13 @@ final class CreateCommand extends Command
 
         $response = $this->keycloakClient->createClient(
             [
-                'clientId' => $input->getArgument('client-name') ?? 'client-'.random_int(0, 99999999),
+                'clientId' => $input->getArgument('client-name') ?? 'client-' . random_int(0, 99999999),
                 'enabled' => true,
                 'bearerOnly' => "false",
-                'redirectUris'=>["http://localhost:8080/*"],
-                'directAccessGrantsEnabled'=>true,
-                'clientAuthenticatorType'=>'client-secret',
-                'secret'=>'mysecret'
+                'redirectUris' => ["http://localhost:8080/*"],
+                'directAccessGrantsEnabled' => true,
+                'clientAuthenticatorType' => 'client-secret',
+                'secret' => 'mysecret'
             ]
         );
 

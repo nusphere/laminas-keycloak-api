@@ -11,7 +11,7 @@ use Laminas\KeyCloak\Api\Model\Realm;
 
 class RealmServices extends AdminClient
 {
-    /**     *
+    /**
      * @throws ErrorException
      * @throws WarningException
      * @throws RealmException

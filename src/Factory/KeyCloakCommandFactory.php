@@ -13,7 +13,7 @@ class KeyCloakCommandFactory extends KeyCloakApiFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        switch($requestedName) {
+        switch ($requestedName) {
             case CreateCommand::class:
             case DeleteCommand::class:
             case ImportCommand::class:
