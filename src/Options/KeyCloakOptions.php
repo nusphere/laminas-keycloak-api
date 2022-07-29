@@ -4,7 +4,7 @@ namespace Laminas\KeyCloak\Api\Options;
 
 use Laminas\Stdlib\AbstractOptions;
 
-class KeyCloakOptions extends AbstractOptions
+final class KeyCloakOptions extends AbstractOptions
 {
     private string $hostname = 'localhost';
     private string $scheme = 'http';

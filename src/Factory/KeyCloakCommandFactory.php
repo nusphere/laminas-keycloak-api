@@ -9,7 +9,7 @@ use Laminas\KeyCloak\Api\Command\Realm\ImportCommand;
 use Laminas\KeyCloak\Api\Services\RealmServices;
 use Psr\Container\ContainerInterface;
 
-class KeyCloakCommandFactory extends KeyCloakApiFactory
+final class KeyCloakCommandFactory extends KeyCloakApiFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {

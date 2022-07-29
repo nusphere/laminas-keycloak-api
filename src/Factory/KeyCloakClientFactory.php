@@ -6,7 +6,7 @@ use Keycloak\Admin\KeycloakClient;
 use Laminas\KeyCloak\Api\Options\KeyCloakOptions;
 use Psr\Container\ContainerInterface;
 
-class KeyCloakClientFactory extends KeyCloakApiFactory
+final class KeyCloakClientFactory extends KeyCloakApiFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {

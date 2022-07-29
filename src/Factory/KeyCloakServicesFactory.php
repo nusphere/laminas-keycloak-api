@@ -7,7 +7,7 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\KeyCloak\Api\Services\AdminClient;
 use Psr\Container\ContainerInterface;
 
-class KeyCloakServicesFactory extends KeyCloakApiFactory
+final class KeyCloakServicesFactory extends KeyCloakApiFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {

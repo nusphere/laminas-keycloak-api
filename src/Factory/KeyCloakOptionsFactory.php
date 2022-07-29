@@ -5,7 +5,7 @@ namespace Laminas\KeyCloak\Api\Factory;
 use Laminas\KeyCloak\Api\Options\KeyCloakOptions;
 use Psr\Container\ContainerInterface;
 
-class KeyCloakOptionsFactory extends KeyCloakApiFactory
+final class KeyCloakOptionsFactory extends KeyCloakApiFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
