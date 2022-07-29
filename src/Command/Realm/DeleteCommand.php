@@ -2,54 +2,54 @@
 
 namespace Laminas\KeyCloak\Api\Command\Realm;
 
-use Keycloak\Admin\KeycloakClient;
+use Laminas\KeyCloak\Api\Exception\ErrorException;
+use Laminas\KeyCloak\Api\Exception\NoSuccessException;
+use Laminas\KeyCloak\Api\Exception\RealmException;
+use Laminas\KeyCloak\Api\Services\RealmServices;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 final class DeleteCommand extends Command
 {
     protected static $defaultName = 'keycloak:realms:delete';
+    protected static $defaultDescription = 'delete a realm with given realm name';
 
-    private KeycloakClient $keycloakClient;
+    private RealmServices $realmService;
 
-    public function __construct(KeycloakClient $keycloakClient)
+    public function __construct(RealmServices $realmService)
     {
+        $this->realmService = $realmService;
+
         parent::__construct(self::$defaultName);
-        $this->keycloakClient = $keycloakClient;
     }
 
     protected function configure()
     {
-        $this->addArgument(
-            'realm-name',
-            InputArgument::REQUIRED,
-            'name for the realm'
-        );
+        $this->addArgument('realm-name', InputArgument::REQUIRED, 'name for the realm');
+        $this->addOption('stop-at-warning', null, InputOption::VALUE_OPTIONAL);
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $realmName = $input->getArgument('realm-name');
+        try {
+            $name = $input->getArgument('realm-name');
 
-        $realmInfo = $this->keycloakClient->getRealm(['realm' => $realmName]);
+            $this->realmService->deleteRealm($name);
 
-        // got error, when realm not exists
-        if (!array_key_exists('error', $realmInfo)) {
-            $result = $this->keycloakClient->deleteRealm(['realm' => $realmName]);
+            $output->writeln('<info>Realm "' . $name . '" was successfully deleted.</info>');
+            return Command::SUCCESS;
 
-            if (array_key_exists('errorMessage', $result)) {
-                $output->writeln('<info>' . $result['errorMessage'] . '</info>');
+        } catch (NoSuccessException | RealmException $e) {
+            $output->writeln('<comment>Warning: ' . $e->getMessage() . '</comment>');
 
-                return Command::FAILURE;
-            }
+            return $input->hasOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;
+        } catch (ErrorException $e) {
+            $output->writeln('<error>ERROR: ' . $e->getMessage() . '</error>');
 
-            $output->writeln('<info>Realm ' . $realmName . ' delete</info>');
-        } else {
-            $output->writeln('<error>Realm ' . $realmName . ' does not exists</error>');
+            return Command::INVALID;
         }
-
-        return Command::SUCCESS;
     }
 }
