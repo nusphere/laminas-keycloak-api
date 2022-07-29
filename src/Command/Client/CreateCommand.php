@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CreateCommand extends Command
 {
     protected static $defaultName = 'keycloak:client:create';
+    protected static $defaultDescription = 'create a client to a given realm';
 
     private KeycloakClient $keycloakClient;
 
