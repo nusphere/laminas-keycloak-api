@@ -3,6 +3,14 @@
 namespace Laminas\KeyCloak\Api\Command\Client;
 
 use Keycloak\Admin\KeycloakClient;
+use Laminas\KeyCloak\Api\Exception\ClientException;
+use Laminas\KeyCloak\Api\Exception\ErrorException;
+use Laminas\KeyCloak\Api\Exception\RealmException;
+use Laminas\KeyCloak\Api\Exception\WarningException;
+use Laminas\KeyCloak\Api\Model\Client;
+use Laminas\KeyCloak\Api\Model\Realm;
+use Laminas\KeyCloak\Api\Services\ClientServices;
+use Laminas\KeyCloak\Api\Services\RealmServices;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,12 +21,12 @@ final class CreateCommand extends Command
     protected static $defaultName = 'keycloak:client:create';
     protected static $defaultDescription = 'create a client to a given realm';
 
-    private KeycloakClient $keycloakClient;
+    private ClientServices $clientServices;
 
-    public function __construct(KeycloakClient $keycloakClient)
+    public function __construct(ClientServices $clientServices)
     {
         parent::__construct(self::$defaultName);
-        $this->keycloakClient = $keycloakClient;
+        $this->clientServices = $clientServices;
     }
 
     protected function configure()
@@ -39,36 +47,26 @@ final class CreateCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
+        try {
+            $realm = new Realm();
+            $realm->setRealm($input->getArgument('realm-name'));
 
-        $this->keycloakClient->setRealmName($input->getArgument('realm-name'));
+            $client = new Client();
+            $client->setClientId($input->getArgument('client-name') ?? 'client-' . random_int(0, 99999999));
 
-        $response = $this->keycloakClient->createClient(
-            [
-                'clientId' => $input->getArgument('client-name') ?? 'client-' . random_int(0, 99999999),
-                'enabled' => true,
-                'bearerOnly' => "false",
-                'redirectUris' => ["http://localhost:8080/*"],
-                'directAccessGrantsEnabled' => true,
-                'clientAuthenticatorType' => 'client-secret',
-                'secret' => 'mysecret'
-            ]
-        );
+            $this->clientServices->createClient($realm, $client);
 
-        if (array_key_exists('error', $response)) {
-            $output->writeln('<error>' . $response['error'] . '</error>');
+            $output->writeln('<info>Client "' . $client->getClientId() .'" successfully created</info>');
+
+            return Command::SUCCESS;
+        } catch (WarningException | ClientException $e) {
+            $output->writeln('<comment>Warning: ' . $e->getMessage() . '</comment>');
+
+            return $input->hasOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;
+        } catch (ErrorException $e) {
+            $output->writeln('<error>ERROR: ' . $e->getMessage() . '</error>');
 
             return Command::INVALID;
         }
-
-        if (array_key_exists('errorMessage', $response)) {
-            $output->writeln('<error>' . $response['errorMessage'] . '</error>');
-
-            return Command::FAILURE;
-        }
-
-
-        $output->writeln('<info>Client successfully created</info>');
-
-        return Command::SUCCESS;
     }
 }

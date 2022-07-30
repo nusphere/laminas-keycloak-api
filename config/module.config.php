@@ -29,6 +29,7 @@ return [
 
             // Services
             Services\RealmServices::class => Factory\KeyCloakServicesFactory::class,
+            Services\ClientServices::class => Factory\KeyCloakServicesFactory::class,
 
             // External Services
             KeycloakClient::class => Factory\KeyCloakClientFactory::class,
