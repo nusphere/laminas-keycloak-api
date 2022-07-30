@@ -55,10 +55,10 @@ class ClientServices extends AdminClient
         }
 
         if (count($clients) === 0) {
-            throw new WarningException('This client-Id "'. $client->getClientId() . '" not found');
+            throw new WarningException('This client-Id "' . $client->getClientId() . '" not found');
         }
 
-        throw new ClientException('This client-Id "'. $client->getClientId() . '" not unique');
+        throw new ClientException('This client-Id "' . $client->getClientId() . '" not unique');
     }
 
     /**

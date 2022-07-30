@@ -56,7 +56,7 @@ final class CreateCommand extends Command
 
             $this->clientServices->createClient($realm, $client);
 
-            $output->writeln('<info>Client "' . $client->getClientId() .'" successfully created</info>');
+            $output->writeln('<info>Client "' . $client->getClientId() . '" successfully created</info>');
 
             return Command::SUCCESS;
         } catch (WarningException | ClientException $e) {
