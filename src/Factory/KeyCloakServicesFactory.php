@@ -16,7 +16,9 @@ final class KeyCloakServicesFactory extends KeyCloakApiFactory
             $container->get(KeycloakClient::class)
         );
 
-        $requestedClass->setHydrator(new ClassMethodsHydrator());
+        $classMethodsHydrator = new ClassMethodsHydrator();
+        $classMethodsHydrator->setUnderscoreSeparatedKeys(false);
+        $requestedClass->setHydrator($classMethodsHydrator);
 
         return $requestedClass;
     }
