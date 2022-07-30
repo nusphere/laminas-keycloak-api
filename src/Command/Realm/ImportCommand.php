@@ -26,7 +26,7 @@ final class ImportCommand extends Command
         parent::__construct(self::$defaultName);
     }
 
-    protected function configure()
+    public function configure(): void
     {
         $this->addArgument('fileName', InputArgument::REQUIRED, 'file name for importing the realm');
         $this->addOption('stop-at-warning', null, InputOption::VALUE_OPTIONAL);

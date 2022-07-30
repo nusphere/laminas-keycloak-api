@@ -27,7 +27,7 @@ final class DeleteCommand extends Command
         parent::__construct(self::$defaultName);
     }
 
-    protected function configure()
+    public function configure(): void
     {
         $this->addArgument('realm-name', InputArgument::REQUIRED, 'name for the realm');
         $this->addOption('stop-at-warning', null, InputOption::VALUE_OPTIONAL);
