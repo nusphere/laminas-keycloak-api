@@ -19,6 +19,7 @@ final class KeyCloakCommandFactory extends KeyCloakApiFactory
             case Realm\ImportCommand::class:
                 return new $requestedName($container->get(RealmServices::class));
             case Client\CreateCommand::class:
+            case Client\ListCommand::class:
                 return new $requestedName($container->get(ClientServices::class));
             default:
                 return new $requestedName($container->get(KeycloakClient::class));

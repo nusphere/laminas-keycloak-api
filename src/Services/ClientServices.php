@@ -34,7 +34,36 @@ class ClientServices extends AdminClient
     }
 
     /**
+     * @param Realm $realm
+     * @param string $searchString
+     * @return Client[]
+     *
      * @throws ClientException
+     * @throws ErrorException
+     * @throws WarningException
+     */
+    final public function getClients(Realm $realm, string $searchString = null, bool $showInternal = false): array
+    {
+        $clientArray = [];
+
+        $this->getKeycloakClient()->setRealmName($realm->getRealm());
+
+        $clients = $this->getKeycloakClient()->getClients([
+            'clientId' => $searchString,
+            'viewableOnly' => !$showInternal
+        ]);
+
+        $this->checkResponseError($clients);
+        $this->checkResponseWarnings($clients);
+
+        foreach ($clients as $client) {
+            $clientArray[] = $this->getHydrator()->hydrate($client, new Client());
+        }
+
+        return $clientArray;
+    }
+
+    /**
      * @throws ErrorException
      * @throws WarningException
      */
@@ -42,36 +71,34 @@ class ClientServices extends AdminClient
     {
         $this->getKeycloakClient()->setRealmName($realm->getRealm());
 
-        $clients = $this->getKeycloakClient()->getClients([
-            'clientId' => $client->getClientId(),
-            'first' => 1
+        $clientResponse = $this->getKeycloakClient()->getClient([
+            'id' => $client->getId(),
         ]);
 
-        $this->checkResponseError($clients);
-        $this->checkResponseWarnings($clients);
+        $this->checkResponseError($clientResponse);
+        $this->checkResponseWarnings($clientResponse);
 
-        if (count($clients) === 1) {
-            return $this->getHydrator()->hydrate($clients[0], new Client());
-        }
-
-        if (count($clients) === 0) {
-            throw new WarningException('This client-Id "' . $client->getClientId() . '" not found');
-        }
-
-        throw new ClientException('This client-Id "' . $client->getClientId() . '" not unique');
+        return $this->getHydrator()->hydrate($clientResponse, new Client());
     }
 
     /**
      * @throws ClientException
      */
-    final public function existsClient(Realm $realm, Client $client): bool
+    final public function existsClient(Realm $realm, Client $searchedClient): bool
     {
         try {
-            $this->getClient($realm, $client);
+
+            $clients = $this->getClients($realm);
+
+            foreach ($clients as $client) {
+                if ($client->getClientId() === $searchedClient->getClientId()) {
+                    return true;
+                }
+            }
+
+            return false;
         } catch (ErrorException | WarningException $e) {
             return false;
         }
-
-        return true;
     }
 }

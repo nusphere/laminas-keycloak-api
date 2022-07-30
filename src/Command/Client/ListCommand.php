@@ -2,25 +2,20 @@
 
 namespace Laminas\KeyCloak\Api\Command\Client;
 
-use Keycloak\Admin\KeycloakClient;
 use Laminas\KeyCloak\Api\Exception\ClientException;
 use Laminas\KeyCloak\Api\Exception\ErrorException;
-use Laminas\KeyCloak\Api\Exception\RealmException;
 use Laminas\KeyCloak\Api\Exception\WarningException;
-use Laminas\KeyCloak\Api\Model\Client;
 use Laminas\KeyCloak\Api\Model\Realm;
 use Laminas\KeyCloak\Api\Services\ClientServices;
-use Laminas\KeyCloak\Api\Services\RealmServices;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class CreateCommand extends Command
+final class ListCommand extends Command
 {
-    protected static $defaultName = 'keycloak:client:create';
-    protected static $defaultDescription = 'create a client to a given realm';
+    protected static $defaultName = 'keycloak:client:list';
+    protected static $defaultDescription = 'list all client to a given realm';
 
     private ClientServices $clientServices;
 
@@ -33,8 +28,6 @@ final class CreateCommand extends Command
     public function configure(): void
     {
         $this->addArgument('realm-name', InputArgument::REQUIRED, 'name for the realm');
-        $this->addArgument('client-name', InputArgument::OPTIONAL, 'name for the client');
-        $this->addOption('stop-at-warning', null, InputOption::VALUE_NONE);
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -43,18 +36,19 @@ final class CreateCommand extends Command
             $realm = new Realm();
             $realm->setRealm($input->getArgument('realm-name'));
 
-            $client = new Client();
-            $client->setClientId($input->getArgument('client-name') ?? 'client-' . random_int(0, 99999999));
+            $clients = $this->clientServices->getClients($realm);
 
-            $this->clientServices->createClient($realm, $client);
+            $output->writeln('<info>Found ' . count($clients) . ' clients at Realm "' . $realm->getRealm() . '"</info>');
 
-            $output->writeln('<info>Client "' . $client->getClientId() . '" successfully created</info>');
+            foreach ($clients as $client) {
+                $output->writeln($client->getId() . ' - ' . $client->getClientId() . ' - ');
+            }
 
             return Command::SUCCESS;
         } catch (WarningException | ClientException $e) {
             $output->writeln('<comment>Warning: ' . $e->getMessage() . '</comment>');
 
-            return $input->getOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;
+            return $input->hasOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;
         } catch (ErrorException $e) {
             $output->writeln('<error>ERROR: ' . $e->getMessage() . '</error>');
 

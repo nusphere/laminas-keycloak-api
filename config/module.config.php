@@ -10,6 +10,7 @@ return [
     'laminas-cli' => [
         'commands' => [
             Command\Client\CreateCommand::getDefaultName() => Command\Client\CreateCommand::class,
+            Command\Client\ListCommand::getDefaultName() => Command\Client\ListCommand::class,
             Command\Realm\ImportCommand::getDefaultName() => Command\Realm\ImportCommand::class,
             Command\Realm\CreateCommand::getDefaultName() => Command\Realm\CreateCommand::class,
             Command\Realm\DeleteCommand::getDefaultName() => Command\Realm\DeleteCommand::class,
@@ -20,6 +21,7 @@ return [
         'factories' => [
             // Commands
             Command\Client\CreateCommand::class => Factory\KeyCloakCommandFactory::class,
+            Command\Client\ListCommand::class => Factory\KeyCloakCommandFactory::class,
             Command\Realm\ImportCommand::class => Factory\KeyCloakCommandFactory::class,
             Command\Realm\CreateCommand::class => Factory\KeyCloakCommandFactory::class,
             Command\Realm\DeleteCommand::class => Factory\KeyCloakCommandFactory::class,

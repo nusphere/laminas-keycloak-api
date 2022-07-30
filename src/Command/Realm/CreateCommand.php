@@ -30,7 +30,7 @@ final class CreateCommand extends Command
     public function configure(): void
     {
         $this->addArgument('realm-name', InputArgument::REQUIRED, 'name for the realm');
-        $this->addOption('stop-at-warning', null, InputOption::VALUE_OPTIONAL);
+        $this->addOption('stop-at-warning', null, InputOption::VALUE_NONE);
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -47,7 +47,7 @@ final class CreateCommand extends Command
         } catch (WarningException | RealmException $e) {
             $output->writeln('<comment>Warning: ' . $e->getMessage() . '</comment>');
 
-            return $input->hasOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;
+            return $input->getOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;
         } catch (ErrorException $e) {
             $output->writeln('<error>ERROR: ' . $e->getMessage() . '</error>');
 
