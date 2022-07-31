@@ -38,7 +38,9 @@ final class ListCommand extends Command
 
             $clients = $this->clientServices->getClients($realm);
 
-            $output->writeln('<info>Found ' . count($clients) . ' clients at Realm "' . $realm->getRealm() . '"</info>');
+            $output->writeln(
+                '<info>Found ' . count($clients) . ' clients at Realm "' . $realm->getRealm() . '"</info>'
+            );
 
             foreach ($clients as $client) {
                 $output->writeln($client->getId() . ' - ' . $client->getClientId() . ' - ');
@@ -48,7 +50,8 @@ final class ListCommand extends Command
         } catch (WarningException | ClientException $e) {
             $output->writeln('<comment>Warning: ' . $e->getMessage() . '</comment>');
 
-            return $input->hasOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;
+            /** @noinspection PhpCastIsUnnecessaryInspection */
+            return (bool) $input->getOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;
         } catch (ErrorException $e) {
             $output->writeln('<error>ERROR: ' . $e->getMessage() . '</error>');
 

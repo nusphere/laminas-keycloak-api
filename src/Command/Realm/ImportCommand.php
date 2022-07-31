@@ -45,7 +45,8 @@ final class ImportCommand extends Command
         } catch (WarningException | RealmException $e) {
             $output->writeln('<comment>Warning: ' . $e->getMessage() . '</comment>');
 
-            return $input->getOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;
+            /** @noinspection PhpUnnecessaryBoolCastInspection */
+            return (bool) $input->getOption('stop-at-warning') ? Command::FAILURE : Command::SUCCESS;
         } catch (ErrorException $e) {
             $output->writeln('<error>ERROR: ' . $e->getMessage() . '</error>');
 

@@ -87,7 +87,6 @@ class ClientServices extends AdminClient
     final public function existsClient(Realm $realm, Client $searchedClient): bool
     {
         try {
-
             $clients = $this->getClients($realm);
 
             foreach ($clients as $client) {
